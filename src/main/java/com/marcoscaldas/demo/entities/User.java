@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table (name = "tb_user") 
 public class User implements Serializable {	
@@ -24,6 +26,7 @@ public class User implements Serializable {
 	private String phone;
 	private String password;
 	
+	@JsonIgnore   // para nao dar loop com a relacao ORDER obs se colocar no order vai listar os pedidos do usuario
 	@OneToMany (mappedBy = "client")   // criar a FK
 	private List<Order> orders = new ArrayList<>();  // associando a classe ORDER
 	
