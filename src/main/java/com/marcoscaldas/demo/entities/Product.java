@@ -11,7 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -33,6 +36,9 @@ public class Product implements Serializable {
 	inverseJoinColumns = @JoinColumn(name = "category_id"))
 	// usar o Set para que 1 produto nao se repita na mesma categoria
 	private Set<Category> categories = new HashSet<>(); // associacao com categoria, Set é interface HashSet é uma classe do Set
+	
+	@OneToMany(mappedBy = "id.product") // mapedar no BD
+	private Set<OrderItem> items = new HashSet<>(); // depois mapedar no BD linha 38
 	
 	public Product() {
 		}
@@ -89,6 +95,15 @@ public class Product implements Serializable {
 
 	public Set<Category> getCategories() {
 		return categories;
+	}
+	
+	@JsonIgnore
+	public Set<Order> getOrders(){
+		Set<Order> set = new HashSet<>();
+		for (OrderItem x : items) {
+			set.add(x.getOrder());
+		}
+		return set;
 	}
 
 	@Override
