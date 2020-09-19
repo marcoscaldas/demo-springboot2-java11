@@ -6,6 +6,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.marcoscaldas.demo.entities.pk.OrderItemPK;
 
 @Entity
@@ -14,7 +15,7 @@ public class OrderItem  implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId     // chave composta
-	private OrderItemPK id;
+	private OrderItemPK id = new OrderItemPK();  // tem que estanciar pois é uma chnava composta
 	
 	private Integer quantity;
 	private Double price;
@@ -32,6 +33,7 @@ public class OrderItem  implements Serializable{
 		this.price = price;
 	}
 	
+	@JsonIgnore  //  colocar aqui para nao dar o loop no Postman
 	public Order getOrder() {
 		return id.getOrder();
 	}
